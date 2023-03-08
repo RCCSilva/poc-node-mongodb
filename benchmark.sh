@@ -2,16 +2,7 @@
 
 set -e
 
-./start-dev-rs.sh > /dev/null
-
-npm run start &
-
-while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/benchmark/mongoose)" != "200" ]]; do sleep 5; done
-
-echo "Benchmarking Mongoose..."
-autocannon -c 100 -d 30 http://localhost:3000/benchmark/mongoose
-
-fuser -k 3000/tcp
+#### Prisma
 
 ./start-dev-rs.sh > /dev/null
 
@@ -21,5 +12,18 @@ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/benchmark/pr
 
 echo "Benchmarking Prisma..."
 autocannon -c 100 -d 30 http://localhost:3000/benchmark/prisma
+
+fuser -k 3000/tcp
+
+#### Mongoose
+
+./start-dev-rs.sh > /dev/null
+
+npm run start &
+
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/benchmark/mongoose)" != "200" ]]; do sleep 5; done
+
+echo "Benchmarking Mongoose..."
+autocannon -c 100 -d 30 http://localhost:3000/benchmark/mongoose
 
 fuser -k 3000/tcp
