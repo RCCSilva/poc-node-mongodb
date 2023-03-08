@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo
+    volumes:
+      - ./scripts/:/scripts/
+    restart: always
+    network_mode: "host"
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
